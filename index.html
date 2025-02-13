@@ -60,24 +60,28 @@
     <script>
         // 内置学生名单
         const students = [
-            "莫锦洋", "宁候群", "彭建城", "朱文涛", "宾港", "陈凤清", "覃敏欣", 
-            "王浩诚", "王茂全", "符一凡", "梁庆", "郑家文", "李美婷", "庞东", 
-            "叶子聪", "刁欣欣", "黄炘莹", "梁春宇", "蔡章丽", "庞振辉", "阮宇光", 
-            "管彪", "刘珊珊", "林俊宏", "薛宇珊", "黄正通", "庞春烽", "关燕玲", 
-            "黄焕彬", "李春生", "林定东", "沈锐锋", "颜展鸿", "陈惠林", "刘家华", 
-            "覃怡欣", "卜嘉琪", "李骏宇", "李晓春", "覃小玲", "高翠兰", "黄日君", 
-            "刘梦红", "刘丝雨", "周琦贵", "刘欣怡", "覃素玲", "黄宇阳", "黄煜铭", 
-            "李彩燕", "梁顺萍", "宋小媚", "王国文", "薛小东", "朱奥运" 
+"莫锦洋", "宁候群", "彭建城", "朱文涛", "宾港", "陈凤清", "覃敏欣", 
+"王浩诚", "王茂全", "符一凡", "梁庆", "郑家文", "李美婷", "庞东", 
+"叶子聪", "刁欣欣", "黄炘莹", "梁春宇", "蔡章丽", "庞振辉", "阮宇光", 
+"管彪", "刘珊珊", "林俊宏", "薛宇珊", "黄正通", "庞春烽", "关燕玲", 
+"黄焕彬", "李春生", "林定东", "沈锐锋", "颜展鸿", "陈惠林", "刘家华", 
+"覃怡欣", "卜嘉琪", "李骏宇", "李晓春", "覃小玲", "高翠兰", "黄日君", 
+"刘梦红", "刘丝雨", "周琦贵", "刘欣怡", "覃素玲", "黄宇阳", "黄煜铭", 
+"李彩燕", "梁顺萍", "宋小媚", "王国文", "薛小东", "朱奥运" 
         ];
 
-        // 存储抽取历史记录
-        let history = [];
+        // 从 localStorage 加载历史记录
+        let history = JSON.parse(localStorage.getItem('drawHistory')) || [];
+
+        // 页面加载时显示历史记录
+        window.onload = function () {
+            updateHistory();
+        };
 
         // 随机抽取函数
         function drawStudents() {
             const drawCount = parseInt(document.getElementById('draw-count').value, 10);
             const resultElement = document.getElementById('result');
-            const historyElement = document.getElementById('history');
 
             if (isNaN(drawCount) || drawCount < 1 || drawCount > students.length) {
                 resultElement.innerText = "请输入有效的抽取人数！";
@@ -93,6 +97,9 @@
 
             // 将本次抽取结果添加到历史记录
             history.push(selectedStudents);
+
+            // 保存历史记录到 localStorage
+            localStorage.setItem('drawHistory', JSON.stringify(history));
 
             // 更新历史记录显示
             updateHistory();
@@ -111,6 +118,7 @@
         // 清除历史记录
         function clearHistory() {
             history = [];
+            localStorage.removeItem('drawHistory');
             document.getElementById('result').innerText = "";
             document.getElementById('history').innerHTML = "";
         }
